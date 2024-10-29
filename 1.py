@@ -4,12 +4,7 @@ from pydantic import BaseModel, EmailStr
 
 
 class Book():
-    title: str
-    author: str
-    year: int
-    categories: list[str]
 
-    
     def __init__(self, title: str, author: str, year: int, categories: list[str]):
         self.title = title
         self.author = author
