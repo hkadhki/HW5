@@ -3,30 +3,29 @@ from pydantic import BaseModel, EmailStr
 
 
 
-class Book():
-
-    def __init__(self, title: str, author: str, year: int, categories: list[str]):
-        self.title = title
-        self.author = author
-        self.year = year
-        self.available = True
-        self.categories = categories
+class Book(BaseModel):
+    title: str
+    author: str
+    year: int
+    categories: list[str]
+    available: bool
+    
     
     def __hash__(self):
         return hash(self.title)
 
 
-class User():
-    def __init__(self, name, email : EmailStr , membership_id : str ):
-        self.name = name
-        self.email = email
-        self.membership_id = membership_id
+class User(BaseModel):
+    name: str
+    email: EmailStr
+    membership_id : str
+
 
     def __hash__(self):
         return hash(self.name)    
 
 
-class Libarary():
+class Libarary(BaseModel):
     #словарь с книгами и их количеством 
     books: Dict[Book, int] = dict()
     #слоарь с юзером и сетом взятых им книг 
@@ -106,21 +105,21 @@ class Libarary():
 class BookNotAvailable(Exception):
     pass
 
-book1 = Book("title1", "author", 1111 , list())
-book2 = Book("title2", "author", 1111 , list())
-user = User("name", "name@gmail.com", "asdsad")
-lib = Libarary
-lib.add_book(lib, book1, 2)
-lib.add_book(lib, book2, 1)
-lib.take_book(lib,book1,user)
+book1 = Book(title = "title1", author = "author", year = 1111 , categories= list(), available = True)
+book2 = Book(title = "title2", author = "author", year = 1111 , categories= list(), available = True)
+user = User(name="name", email="name@gmail.com", membership_id="asdsad")
+lib = Libarary()
+lib.add_book(book=book1,count= 2)
+lib.add_book(book=book2, count= 1)
+lib.take_book(book=book1, user= user)
 
 try:
-    print(lib.is_book_borrow(lib,book1))
+    print(lib.is_book_borrow(book=book1))
 except BookNotAvailable as error:
     print(error)
 
-lib.total_books(lib)
+lib.total_books()
 print()
-lib.return_book(lib,book1,user)
+lib.return_book(book=book1,user= user)
 
-lib.total_books(lib)
+lib.total_books()
